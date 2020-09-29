@@ -2,6 +2,7 @@ from basicsearch_lib02.tileboard import TileBoard
 from basicsearch_lib02.searchrep import Problem
 import math
 
+
 class NPuzzle(Problem):
     """
     NPuzzle - Problem representation for an N-tile puzzle
@@ -43,7 +44,7 @@ class NPuzzle(Problem):
             possible_actions.remove(delta['LEFT'])
         if index_blank_square < i:
             possible_actions.remove(delta['UP'])
-        if index_blank_square % i == i-1:
+        if index_blank_square % i == i - 1:
             possible_actions.remove(delta['RIGHT'])
         if index_blank_square > self.n - i:
             possible_actions.remove(delta['DOWN'])
@@ -56,7 +57,7 @@ class NPuzzle(Problem):
 
     def goal_test(self, state):
         """goal_test(state) - Is state a goal?"""
-        #return state == self.goals
+        # return state == self.goals
 
         param = state.state_tuple()
         return super().goal_test(param)

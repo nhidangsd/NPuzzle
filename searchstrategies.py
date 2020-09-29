@@ -39,6 +39,7 @@ import math
 
 class BreadthFirst:
     "BreadthFirst - breadth first search"
+
     @classmethod
     def g(cls, parentnode, action, childnode):
         """"g - cost from initial state to childnode
@@ -47,7 +48,7 @@ class BreadthFirst:
         """
 
         return parentnode.depth + 1
-    
+
     @classmethod
     def h(cls, searchnode):
         """h - heuristic value"""
@@ -68,13 +69,12 @@ class DepthFirst:
         constrained such that the last edge of the search space
         moves from parentnode to childnode via the specified action
         """
-
-        return childnode.get_g()
+        return 0
 
     @classmethod
     def h(cls, searchnode):
         """h - heuristic value"""
-        return searchnode.get_h()
+        return -searchnode.depth
 
 
 class Manhattan:
@@ -87,10 +87,30 @@ class Manhattan:
         moves from parentnode to childnode via the specified action
         """
 
-        return childnode.get_g()
-
+        return childnode.depth
 
     @classmethod
     def h(cls, searchnode):
         """h - heuristic value"""
-        return searchnode.get_h()
+        # Current_state - A tuple contains the current state retrieving from searchnode
+        current_state = searchnode.state.state_tuple()
+        # Goal_state - A tuple contains one of the goal state in the goal lists
+        goal_states = searchnode.problem.goals
+        # Dimension of the puzzle
+        puzzle_size = math.sqrt(searchnode.problem.n + 1)
+        # Initialize heuristic value to 0
+        h = 0
+        h_list = []
+        for goal_state in goal_states:
+            for x in current_state:
+                # Look up row, column value for x in the current_state and goal_state:
+                # current_row, current_column = cls.find_Row_and_Column(x, current_row, puzzle_size)
+                current_row = current_state.index(x) // puzzle_size
+                current_column = current_state.index(x) % puzzle_size
+                goal_row = goal_state.index(x) // puzzle_size
+                goal_column = goal_state.index(x) % puzzle_size
+
+                h += abs(goal_row - current_row) + abs(goal_column - current_column)
+                h_list.append(h)
+
+        return min(h_list)

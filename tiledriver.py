@@ -14,41 +14,47 @@ import collections
 
 
 def driver():
+    result = {'BFS': {'moves': [], 'explored': [], 'time': []},
+              'DFS': {'moves': [], 'explored': [], 'time': []},
+              'AS': {'moves': [], 'explored': [], 'time': []}}
 
-    for i in range(3, 4):
-        # for strategie in (BreadthFirst, DepthFirst, Manhattan):
-        #     problem = NPuzzle(i*i-1, g=strategie.g, h=strategie.h)
-        #     state = problem.initial
-        #
-        #     print('State')
-        #     print(state)
-        #     print('State tuple', state.state_tuple())
-        #     print('Goals', problem.goals)
-        #     solved = problem.goal_test(state)
-        #
-        #     while not solved:
-        #         actions = problem.actions(state)
-        #         print('graph search', graph_search(problem, verbose=True))
-        #         state = problem.result(state, actions[0])
-        #         solved = problem.goal_test(state)
-        problem = NPuzzle(i * i - 1, g=BreadthFirst.g, h=BreadthFirst.h)
-        state = problem.initial
+    for t in range(31):
+        for i in range(3, 4):
+            problem = NPuzzle(i * i - 1)
+            print('Init State')
+            print(problem.initial)
+            print('Goal States', problem.goals)
+            print('__________________')
+            for strategie in (BreadthFirst, DepthFirst, Manhattan):
+                problem.g = strategie.g
+                problem.h = strategie.h
+                print(f'Result for {strategie}:')
+                moves, exploredNodes, time = graph_search(problem, verbose=True)
+                print('moves type', moves)
+                if strategie is BreadthFirst:
+                    result['BFS']['moves'].append(len(moves))
+                    result['BFS']['explored'].append(exploredNodes)
+                    result['BFS']['time'].append(time)
+                if strategie is DepthFirst:
+                    result['DFS']['moves'].append(len(moves))
+                    result['DFS']['explored'].append(exploredNodes)
+                    result['DFS']['time'].append(time)
+                if strategie is Manhattan:
+                    result['AS']['moves'].append(len(moves))
+                    result['AS']['explored'].append(exploredNodes)
+                    result['AS']['time'].append(time)
 
-        print('Init State\n', state)
-        print('State tuple', state.state_tuple())
-        print('Goals', problem.goals)
-        solved = problem.goal_test(state)
-        a,b,c = graph_search(problem, verbose=True)
-        print('__________________')
-        print("Path to Solution\n", a)
-        print('num explored', b)
-        print('time',c)
-        # while not solved:
-        #     actions = problem.actions(state)
-        #     print('actions:', actions)
-        #     graph_search(problem, verbose=True)
-        #     state = problem.result(state, actions[0])
-        #     solved = problem.goal_test(state)
+                print('~~~~~~~~~~~~~~~')
+    for strategie in result.keys():
+        print('Mean')
+        print(f'For {strategie} - moves is {mean(result[strategie]["moves"])}')
+        print(f'For {strategie} - explores is {mean(result[strategie]["explored"])}')
+        print(f'For {strategie} - times is {mean(result[strategie]["time"])}')
+        print('\n\nStdev')
+        print(f'For {strategie} - moves is {stdev(result[strategie]["moves"])}')
+        print(f'For {strategie} - explores is {stdev(result[strategie]["explored"])}')
+        print(f'For {strategie} - times is {stdev(result[strategie]["time"])}')
+        print('\n\n\n\n\n')
 
 
 # To do:  Run driver() if this is the entry module
