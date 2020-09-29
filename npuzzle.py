@@ -1,6 +1,5 @@
 from basicsearch_lib02.tileboard import TileBoard
 from basicsearch_lib02.searchrep import Problem
-import math
 
 
 class NPuzzle(Problem):
@@ -20,15 +19,14 @@ class NPuzzle(Problem):
         instance any any remaining arguments captured in **kwargs.        
         
         """
-        self.n = n
         # Note on **kwargs:
         # **kwargs is Python construct that captures any remaining arguments 
         # into a dictionary.  The dictionary can be accessed like any other 
         # dictionary, e.g. kwargs[“keyname”], or passed to another function 
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
-        self.board = TileBoard(n, force_state)
 
+        self.board = TileBoard(n, force_state=force_state)
         super().__init__(self.board, goals=self.board.goals, **kwargs)
 
         # raise NotImplemented
@@ -39,14 +37,14 @@ class NPuzzle(Problem):
         possible_actions = list(delta.values())
         index_blank_square = state.state_tuple().index(None)
 
-        i = math.sqrt(self.n + 1)
+        i = state.boardsize
         if index_blank_square % i == 0:
             possible_actions.remove(delta['LEFT'])
         if index_blank_square < i:
             possible_actions.remove(delta['UP'])
         if index_blank_square % i == i - 1:
             possible_actions.remove(delta['RIGHT'])
-        if index_blank_square > self.n - i:
+        if index_blank_square > i*i - i -1:
             possible_actions.remove(delta['DOWN'])
 
         return possible_actions

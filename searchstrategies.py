@@ -34,8 +34,6 @@ Manhattan - city block heuristic search.  To restrict the complexity of
     state. 
 """
 
-import math
-
 
 class BreadthFirst:
     "BreadthFirst - breadth first search"
@@ -87,7 +85,7 @@ class Manhattan:
         moves from parentnode to childnode via the specified action
         """
 
-        return childnode.depth
+        return childnode.depth * 2
 
     @classmethod
     def h(cls, searchnode):
@@ -97,7 +95,7 @@ class Manhattan:
         # Goal_state - A tuple contains one of the goal state in the goal lists
         goal_states = searchnode.problem.goals
         # Dimension of the puzzle
-        puzzle_size = math.sqrt(searchnode.problem.n + 1)
+        puzzle_size = searchnode.problem.initial.boardsize
         # Initialize heuristic value to 0
         h = 0
         h_list = []

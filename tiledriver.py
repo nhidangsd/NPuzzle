@@ -18,8 +18,8 @@ def driver():
               'DFS': {'moves': [], 'explored': [], 'time': []},
               'AS': {'moves': [], 'explored': [], 'time': []}}
 
-    for t in range(31):
-        for i in range(3, 4):
+    for t in range(2):
+        for i in range(2, 3):
             problem = NPuzzle(i * i - 1)
             print('Init State')
             print(problem.initial)
@@ -30,7 +30,6 @@ def driver():
                 problem.h = strategie.h
                 print(f'Result for {strategie}:')
                 moves, exploredNodes, time = graph_search(problem, verbose=True)
-                print('moves type', moves)
                 if strategie is BreadthFirst:
                     result['BFS']['moves'].append(len(moves))
                     result['BFS']['explored'].append(exploredNodes)

@@ -85,7 +85,6 @@ def graph_search(problem, verbose=False, debug=False):
         charlie = timer.elapsed_s()
         if verbose:
             print(f'Solution in {len(actions)} moves')
-            # print(alpha)
             for i in range(len(actions)):
                 print(f'Move {i + 1} - {actions[i]}')
                 print(alpha[i+1].state, end='\n\n')
