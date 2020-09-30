@@ -8,7 +8,7 @@ and A* search by varying the parameters given to it.
   
 - To go inside the installed project, run:
 
-  $ cd npuzzle_r1
+  $ cd NPuzzle
   
 - To run this project, run:
 
