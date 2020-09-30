@@ -27,4 +27,4 @@ deviation of the following measurements:
       
       • elapsed time in seconds.
       
-  - For debugging purpose, please set variable 'verbose' when calling the graph_search() on line 60 in tiledriver.py to see each moves that the puzzle make when perform the search.
+  - For debugging purpose, please set variable 'verbose' when calling the graph_search() in tiledriver.py to see each moves that the puzzle make when perform the search.
