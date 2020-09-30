@@ -74,29 +74,12 @@ def graph_search(problem, verbose=False, debug=False):
     # Start the timer:
     timer = Timer()
 
-    # Create a hashtable to store all explored states as state_tuple
+    # Create a hashtable to store all explored states
     exploredStates = Explored()
-
-    firstNode = Node(problem, problem.initial)
-    if problem.goal_test(firstNode.state):
-        alpha = firstNode.path()
-        actions = firstNode.solution()
-        beta = len(exploredStates.exploredStates)
-        charlie = timer.elapsed_s()
-        if verbose:
-            print(f'Solution in {len(actions)} moves')
-            for i in range(len(actions)):
-                print(f'Move {i + 1} - {actions[i]}')
-                print(alpha[i+1].state, end='\n\n')
-            print('\nnum explored', beta)
-            print('time', charlie)
-        return alpha, beta, charlie
-
     # Create a PriorityQueue to store all current states
-    frontier = PriorityQueue(f=lambda firstnode: firstNode.g + firstNode.h)
-    # Initialize the frontier
-    # firstNode = Node(problem, problem.initial)
-    frontier.append(firstNode)
+    frontier = PriorityQueue(f=lambda node: node.g + node.h)
+    # Initialize the frontier with the first Node
+    frontier.append(Node(problem, problem.initial))
 
     # Loop until the solution is found or the state space is exhausted
     while frontier.__len__() != 0:
@@ -104,56 +87,34 @@ def graph_search(problem, verbose=False, debug=False):
         # Pop a node from the frontier
         node = frontier.pop()
 
-        # Add this node to explored states if not exists yet:
-        for child in node.expand(problem):
-            if problem.goal_test(child.state):
-                alpha = child.path()
-                actions = child.solution()
-                beta = len(exploredStates.exploredStates)
-                charlie = timer.elapsed_s()
-                if verbose:
-                    print(f'Solution in {len(actions)} moves')
-                    # print(alpha)
-                    for i in range(len(actions)):
-                        print(f'Move {i +1} - {actions[i]}')
-                        print(alpha[i+1].state, end='\n\n')
-                    print('\nnum explored', beta)
-                    print('time', charlie)
-                return alpha, beta, charlie
-            child_tuple = child.state.state_tuple()
-            if not exploredStates.exists(child_tuple):
-                exploredStates.add(child_tuple)
-                frontier.append(child)
-    return None
+        if problem.goal_test(node.state):
+            alpha = node.path()
+            actions = node.solution()
 
-    # #Loop until the solution is found or the state space is exhausted
-    # done = found = False
-    # while not done:
-    #
-    #     node = frontier.pop()
-    #     node_tuple = node.state.state_tuple()
-    #
-    #     # Check if this node is the goals
-    #     # Else expand this node, add children to frontier
-    #     if problem.goal_test(node.state):
-    #         done = found = True
-    #         break
-    #     else:
-    #         # Add this node to explored states if not exists yet:
-    #         if not exploredStates.exists(node_tuple):
-    #             exploredStates.add(node_tuple)
-    #         else:
-    #             continue
-    #         # Load new children into the frontier
-    #         for child in node.expand(problem):
-    #             if problem.goal_test(node.state):
-    #                 done = found = True
-    #                 break
-    #             child_tuple = child.state.state_tuple()
-    #             if not exploredStates.exists(child_tuple) and not frontier.__contains__(child):
-    #                 frontier.append(child)
-    #
-    #             # Is it done yet?
-    #             done = frontier.__len__() == 0
-    #
-    # return node.path(), len(exploredStates.exploredStates), timer.elapsed() if found else None
+            # If verbose is True, display all moves
+            if verbose:
+                print(f'Solution in {len(actions)} moves')
+                for i in range(len(actions)):
+                    print(f'Move {i + 1} - {actions[i]}')
+                    print(alpha[i + 1].state, end='\n\n')
+
+            # Return a Tuple contains:
+            # - List of actions to solve the problem,
+            # - Number of nodes explored,
+            # - elapsed_s in seconds
+            return alpha, len(exploredStates.exploredStates), timer.elapsed_s()
+
+        else:
+            # Explore the children of current node
+            for child in node.expand(problem):
+
+                child_tuple = child.state.state_tuple()
+
+                # if we haven't explored this child yet
+                # Load it into frontier and explore set
+                if not exploredStates.exists(child_tuple):
+                    exploredStates.add(child_tuple)
+                    frontier.append(child)
+
+    # If no solution found, return None
+    return None

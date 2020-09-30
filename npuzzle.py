@@ -29,21 +29,32 @@ class NPuzzle(Problem):
         self.board = TileBoard(n, force_state=force_state)
         super().__init__(self.board, goals=self.board.goals, **kwargs)
 
-        # raise NotImplemented
-
     def actions(self, state):
         """actions(state) - find a set of actions applicable to specified state"""
+
+        # List of all actions
         delta = {'UP': [-1, 0], 'DOWN': [1, 0], 'LEFT': [0, -1], 'RIGHT': [0, 1]}
+
+        # List of all legal moves
         possible_actions = list(delta.values())
+
+        # Index of the '.' in the current state
         index_blank_square = state.state_tuple().index(None)
 
+        # Puzzle size (Exp: 2x2, 3x3, ..., ixi)
         i = state.boardsize
+
+        # Remove all illegal actions for the legal actions list
+        # if '.' is on the 1st column, can't move Left
         if index_blank_square % i == 0:
             possible_actions.remove(delta['LEFT'])
+        # if '.' is on the 1st row, can't move UP
         if index_blank_square < i:
             possible_actions.remove(delta['UP'])
+        # if '.' is on the last column, can't move RIGHT
         if index_blank_square % i == i - 1:
             possible_actions.remove(delta['RIGHT'])
+        # if '.' is on the last row, can't move DOWN
         if index_blank_square > i*i - i -1:
             possible_actions.remove(delta['DOWN'])
 
@@ -51,12 +62,12 @@ class NPuzzle(Problem):
 
     def result(self, state, action):
         """result(state, action)- apply action to state and return new state"""
+
         return state.move(action)
 
     def goal_test(self, state):
         """goal_test(state) - Is state a goal?"""
-        # return state == self.goals
 
-        param = state.state_tuple()
-        return super().goal_test(param)
-        # raise NotImplemented
+        state_tuple = state.state_tuple()
+        return super().goal_test(state_tuple)
+

@@ -1,17 +1,10 @@
-"""
-Created on Feb 8, 2018
-
-@author: mroch
-"""
-
-
 class Explored(object):
     """Maintain an explored set.  Assumes that states are hashable"""
 
     def __init__(self):
         """__init__() - Create an empty explored set"""
+
         self.exploredStates = set()
-        # raise NotImplemented
 
     def exists(self, state):
         """
@@ -21,7 +14,6 @@ class Explored(object):
         """
 
         return state in self.exploredStates
-        # raise NotImplemented
 
     def add(self, state):
         """
@@ -29,7 +21,6 @@ class Explored(object):
         :param state:  A problem state that is hashable, e.g. a tuple
         :return: None
         """
-        self.exploredStates.add(state)
-        # raise NotImplemented
 
+        self.exploredStates.add(state)
 

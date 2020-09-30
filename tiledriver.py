@@ -2,6 +2,20 @@
 driver for graph search problem
 
 """
+"""
+We the undersigned promise that we have in good faith attempted to follow the principles of pair programming. Although
+we were free to discuss ideas with others, the implementation is our own. We have shared a common workspace and taken 
+turns at the keyboard for the majority of the work that we are submitting. Furthermore, any non programming portions
+of the assignment were done independently. We recognize that should this not be the case, 
+we will be subject to penalties as outlined in the course syllabus.
+
+Pair Programmer 1 (print & sign your name, then date it)
+BRANDON RENDON 
+09/29/2020
+Pair Programmer 2 (print & sign your name, then date it)
+NHI DANG
+09/29/2020
+"""
 
 from statistics import (mean, stdev)  # Only available in Python 3.4 and newer
 
@@ -14,46 +28,53 @@ import collections
 
 
 def driver():
-    result = {'BFS': {'moves': [], 'explored': [], 'time': []},
-              'DFS': {'moves': [], 'explored': [], 'time': []},
-              'AS': {'moves': [], 'explored': [], 'time': []}}
+    timer = Timer()
+    # result dictionary will contain the result for all strategies
+    results = {'BFS': {'Total_steps': [], 'Total_explored_nodes': [], 'Time_in_seconds': []},
+               'DFS': {'Total_steps': [], 'Total_explored_nodes': [], 'Time_in_seconds': []},
+               'AS': {'Total_steps': [], 'Total_explored_nodes': [], 'Time_in_seconds': []}}
 
-    for t in range(2):
-        for i in range(2, 3):
+    # Strategies
+    strategies = {'BFS': BreadthFirst, 'DFS': DepthFirst, 'AS': Manhattan}
+
+    # Create a puzzle 31 times
+    for t in range(31):
+
+        # Create an 8-puzzle (3x3) and perform the search
+        for i in range(3, 4):
             problem = NPuzzle(i * i - 1)
+            print(f'\t<Problem number {t + 1}>')
             print('Init State')
             print(problem.initial)
             print('Goal States', problem.goals)
-            print('__________________')
-            for strategie in (BreadthFirst, DepthFirst, Manhattan):
-                problem.g = strategie.g
-                problem.h = strategie.h
-                print(f'Result for {strategie}:')
-                moves, exploredNodes, time = graph_search(problem, verbose=True)
-                if strategie is BreadthFirst:
-                    result['BFS']['moves'].append(len(moves))
-                    result['BFS']['explored'].append(exploredNodes)
-                    result['BFS']['time'].append(time)
-                if strategie is DepthFirst:
-                    result['DFS']['moves'].append(len(moves))
-                    result['DFS']['explored'].append(exploredNodes)
-                    result['DFS']['time'].append(time)
-                if strategie is Manhattan:
-                    result['AS']['moves'].append(len(moves))
-                    result['AS']['explored'].append(exploredNodes)
-                    result['AS']['time'].append(time)
+            print('___________________________________\n')
 
-                print('~~~~~~~~~~~~~~~')
-    for strategie in result.keys():
-        print('Mean')
-        print(f'For {strategie} - moves is {mean(result[strategie]["moves"])}')
-        print(f'For {strategie} - explores is {mean(result[strategie]["explored"])}')
-        print(f'For {strategie} - times is {mean(result[strategie]["time"])}')
-        print('\n\nStdev')
-        print(f'For {strategie} - moves is {stdev(result[strategie]["moves"])}')
-        print(f'For {strategie} - explores is {stdev(result[strategie]["explored"])}')
-        print(f'For {strategie} - times is {stdev(result[strategie]["time"])}')
-        print('\n\n\n\n\n')
+            # Test each strategies on the same puzzle:
+            for key in strategies:
+                # Assign the g and h method corresponding to the current strategie
+                problem.g = strategies[key].g
+                problem.h = strategies[key].h
+
+                # Execute the search using the current strategie
+                # Set verbose to True if we want to see each move
+                moves, exploredNodes, time = graph_search(problem, verbose=False)
+
+                results[key]['Total_steps'].append(len(moves))
+                results[key]['Total_explored_nodes'].append(exploredNodes)
+                results[key]['Time_in_seconds'].append(time)
+
+    # Print out the Mean and STDev for all strategies used
+    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    print('~~~~~~~~~~~~~SUMMARY TABLE~~~~~~~~~~~~~~~~~\n')
+    for strategie_key in results:
+        items = results[strategie_key]
+        print(f'* Result for strategie: | {strategie_key} | *\n')
+        for item_key in items:
+            print(f'- {item_key}: ')
+            print(f'\t+ Mean: {mean(items[item_key])}')
+            print(f'\t+ STDev: {stdev(items[item_key])}')
+        print('___________________________________________')
+    print(f'\nTotal time to run 31 trials: {timer.elapsed()}')
 
 
 # To do:  Run driver() if this is the entry module

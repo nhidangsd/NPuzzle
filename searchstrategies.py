@@ -50,6 +50,7 @@ class BreadthFirst:
     @classmethod
     def h(cls, searchnode):
         """h - heuristic value"""
+
         return 0
 
 
@@ -67,11 +68,13 @@ class DepthFirst:
         constrained such that the last edge of the search space
         moves from parentnode to childnode via the specified action
         """
+
         return 0
 
     @classmethod
     def h(cls, searchnode):
         """h - heuristic value"""
+
         return -searchnode.depth
 
 
@@ -90,25 +93,32 @@ class Manhattan:
     @classmethod
     def h(cls, searchnode):
         """h - heuristic value"""
+
         # Current_state - A tuple contains the current state retrieving from searchnode
         current_state = searchnode.state.state_tuple()
         # Goal_state - A tuple contains one of the goal state in the goal lists
         goal_states = searchnode.problem.goals
+
         # Dimension of the puzzle
-        puzzle_size = searchnode.problem.initial.boardsize
-        # Initialize heuristic value to 0
+        puzzle_size = searchnode.state.boardsize
+        # Initialize heuristic value to 0 and create a list contains all heuristic value
         h = 0
         h_list = []
+
+        # Check each goal state in the goal_states list
         for goal_state in goal_states:
             for x in current_state:
                 # Look up row, column value for x in the current_state and goal_state:
-                # current_row, current_column = cls.find_Row_and_Column(x, current_row, puzzle_size)
                 current_row = current_state.index(x) // puzzle_size
                 current_column = current_state.index(x) % puzzle_size
                 goal_row = goal_state.index(x) // puzzle_size
                 goal_column = goal_state.index(x) % puzzle_size
 
+                # Calculate the cost of moving x and update the h value
                 h += abs(goal_row - current_row) + abs(goal_column - current_column)
-                h_list.append(h)
 
-        return min(h_list)
+            h_list.append(h)    # Add new h value into the list
+
+        # Only return the minimum h value from the h_list
+        # if h_list is empty, return 0
+        return min(h_list) if len(h_list) > 0 else h

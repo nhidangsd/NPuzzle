@@ -1,0 +1,38 @@
+* Result for strategie: | BFS | *
+
+- Total_steps: 
+	+ Mean: 23.677419354838708
+	+ STDev: 2.785523251553689
+- Total_explored_nodes: 
+	+ Mean: 119205.19354838709
+	+ STDev: 49241.38786455919
+- Time_in_seconds: 
+	+ Mean: 18.332895096774195
+	+ STDev: 8.789150504754758
+___________________________________________
+* Result for strategie: | DFS | *
+
+- Total_steps: 
+	+ Mean: 45013.6129032258
+	+ STDev: 18013.8028923701
+- Total_explored_nodes: 
+	+ Mean: 151182.1935483871
+	+ STDev: 37771.46875656224
+- Time_in_seconds: 
+	+ Mean: 18.094268225806452
+	+ STDev: 5.7276241884238335
+___________________________________________
+* Result for strategie: | AS | *
+
+- Total_steps: 
+	+ Mean: 23.677419354838708
+	+ STDev: 2.785523251553689
+- Total_explored_nodes: 
+	+ Mean: 19959.354838709678
+	+ STDev: 18461.41617454881
+- Time_in_seconds: 
+	+ Mean: 2.946398129032258
+	+ STDev: 3.0291420381606264
+___________________________________________
+
+Total time to run 31 trials: 0:20:25.793797
